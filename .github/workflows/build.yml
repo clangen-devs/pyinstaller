@@ -22,8 +22,8 @@ jobs:
         with:
           python-version: 3.11
       - name: Build Bootloader
-        run: |
-          python waf all
+        run: python waf all
+        working-directory: ./bootloader
       
       - name: Upload Bootloader
         uses: actions-js/push@master
