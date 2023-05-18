@@ -22,7 +22,7 @@ jobs:
         exclude:
           - os: macos-latest
             bits: 32
-      max-parallel: 1
+      # max-parallel: 1
     
     steps:
       - uses: actions/checkout@v2
@@ -34,9 +34,28 @@ jobs:
         run: python waf all --target-arch ${{ matrix.bits }}bit
         working-directory: ./bootloader
       
+      - name: Copy edited files to a temp dir
+        run: |
+          mkdir temp
+          for file in $(git diff --name-only); do
+            cp $file temp/
+          done
       - name: Upload Bootloader
-        uses: actions-js/push@master
+        uses: actions/upload-artifact@v2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          message: "Update Bootloader"
-          branch: ${{ github.ref_name }}
+          name: ${{ matrix.os }}-${{ matrix.bits }}bit
+          path: temp/
+  
+  commit-changes:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Download Bootloader
+        uses: actions/download-artifact@v3
+        with:
+          path: temp
+      - name: debug
+        run: |
+          ls -la temp
+          ls -la
