@@ -30,6 +30,7 @@ jobs:
         run: python waf all
         working-directory: ./bootloader
       - name: Build 32b bootloader
+        if: matrix.os == 'windows-latest'
         run: python waf all --target-arch 32bit
         working-directory: ./bootloader
       
