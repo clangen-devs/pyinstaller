@@ -27,6 +27,7 @@ jobs:
         working-directory: ./bootloader
       - name: Build 32b bootloader
         run: python waf all --target-arch=32b
+        working-directory: ./bootloader
       
       - name: Upload Bootloader
         uses: actions-js/push@master
