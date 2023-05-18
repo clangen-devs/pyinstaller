@@ -33,6 +33,10 @@ jobs:
       - name: Build Bootloader
         run: python waf all --target-arch ${{ matrix.bits }}bit
         working-directory: ./bootloader
+
+      - name: Report issues
+        if: failure()
+        run: cat bootloader/build/config.log
       
       - name: Copy edited files to a temp dir
         run: |
