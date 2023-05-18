@@ -32,7 +32,7 @@ jobs:
           python-version: 3.11
       - name: Install Gcc
         if: matrix.os == 'ubuntu-latest'
-        run: sudo apt-get install gcc-multilib zlib-dev
+        run: sudo apt-get install gcc-multilib libghc-zlib-dev zlib1g-dev lib32z1 lib32z1-dev
       - name: Build Bootloader
         run: python waf all --target-arch ${{ matrix.bits }}bit
         working-directory: ./bootloader
