@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: bootloader
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -26,7 +30,7 @@ jobs:
         run: python waf all
         working-directory: ./bootloader
       - name: Build 32b bootloader
-        run: python waf all --target-arch=32b
+        run: python waf all --target-arch 32bit
         working-directory: ./bootloader
       
       - name: Upload Bootloader
