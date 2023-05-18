@@ -96,7 +96,7 @@ pyi_main(int argc, char * argv[])
 #endif  /* _MSC_VER */
 
     VS("Clangen Modified PyInstaller Bootloader 5.x\n");
-    FATAL_WINERROR("Hello from custom bootloader!\n");
+    FATALERROR("Hello from custom bootloader!\n");
 
     archive_status = pyi_arch_status_new();
     if (archive_status == NULL) {
