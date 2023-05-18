@@ -18,23 +18,24 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
+        bits: [32, 64]
       max-parallel: 1
     
     steps:
       - uses: actions/checkout@v2
+        if: matrix.os != 'macos-latest' || matrix.bits == 64
       - name: Setup Python
+        if: matrix.os != 'macos-latest' || matrix.bits == 64
         uses: actions/setup-python@v2
         with:
           python-version: 3.11
       - name: Build Bootloader
-        run: python waf all
-        working-directory: ./bootloader
-      - name: Build 32b bootloader
-        if: matrix.os == 'windows-latest'
-        run: python waf all --target-arch 32bit
+        if: matrix.os != 'macos-latest' || matrix.bits == 64
+        run: python waf all --target-arch ${{ matrix.bits }}bit
         working-directory: ./bootloader
       
       - name: Upload Bootloader
+        if: matrix.os != 'macos-latest' || matrix.bits == 64
         uses: actions-js/push@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
