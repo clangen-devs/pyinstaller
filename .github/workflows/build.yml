@@ -42,6 +42,7 @@ jobs:
         run: cat bootloader/build/config.log
       
       - name: Copy edited files to a temp dir
+        shell: bash
         run: |
           mkdir temp
           for file in $(git diff --name-only); do
