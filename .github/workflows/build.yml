@@ -23,7 +23,8 @@ jobs:
           - os: macos-latest
             bits: 32
       # max-parallel: 1
-    
+    env:
+      HAS_CHANGED: 'false'
     steps:
       - uses: actions/checkout@v3
       - name: Setup Python
@@ -48,8 +49,10 @@ jobs:
           for file in $(git ls-files --other --exclude-standard); do
             mkdir -p $(dirname $file)
             cp $file temp/$(dirname $file)
+            echo "HAS_CHANGED=true" >> "$GITHUB_ENV"
           done
       - name: Upload Bootloader
+        if: env.HAS_CHANGED == 'true'
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.os }}-${{ matrix.bits }}bit
@@ -58,15 +61,26 @@ jobs:
   commit-changes:
     needs: build
     runs-on: ubuntu-latest
+    env:
+      HAS_CHANGED: 'false'
     steps:
       - uses: actions/checkout@v3
       - name: Download Bootloader
         uses: actions/download-artifact@v3
         with:
           path: temp
+      - name: Check if files changed
+        shell: bash
+        run: |
+          if [ -d "/path/to/dir" ] 
+          then
+              echo "HAS_CHANGED=true" >> "$GITHUB_ENV"
+          fi
       - name: debug
+        if: env.HAS_CHANGED == 'true'
         run: |
           ls -la temp
           find temp
       - name: Move files
-        run: mv -f temp/*/* Pyinstaller
+        if: env.HAS_CHANGED == 'true'
+        run: mv -f temp/*/* PyInstaller
