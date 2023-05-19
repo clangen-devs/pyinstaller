@@ -45,15 +45,15 @@ jobs:
       - name: Copy edited files to a temp dir
         shell: bash
         run: |
+          rm -rf temp
           mkdir temp
-          for file in $(git ls-files --other --exclude-standard); do
-            mkdir -p $(dirname $file)
-            cp $file temp/$(dirname $file)
+          for file in $(git diff --name-only HEAD); do
+            mkdir -p temp/$(basename $(dirname $file))
+            cp $file temp/$(basename $(dirname $file))/$(basename $file)
             echo "HAS_CHANGED=true" >> "$GITHUB_ENV"
-            echo $file has changed
           done
-      - name: debug
-        uses: mxschmitt/action-tmate@v3
+      # - name: debug
+        # uses: mxschmitt/action-tmate@v3
       - name: Upload Bootloader
         if: env.HAS_CHANGED == 'true'
         uses: actions/upload-artifact@v3
