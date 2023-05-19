@@ -70,20 +70,30 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           path: temp
-      - name: debug
-        uses: mxschmitt/action-tmate@v3
       - name: Check if files changed
         shell: bash
         run: |
-          if [ -d "/path/to/dir" ] 
+          if [ -d "temp" ] 
           then
               echo "HAS_CHANGED=true" >> "$GITHUB_ENV"
           fi
-      - name: debug
-        if: env.HAS_CHANGED == 'true'
-        run: |
-          ls -la temp
-          find temp
       - name: Move files
         if: env.HAS_CHANGED == 'true'
-        run: mv -f temp/* PyInstaller
+        shell: bash
+        run: |
+          for _ in $(ls temp); do
+            for file in $(ls temp/$_); do
+              rm -rf PyInstaller/bootloader/$file
+              echo "Removing PyInstaller/bootloader/$file"
+            done
+          done
+          mv temp/*/* PyInstaller/bootloader
+      - name: Delete temporary files
+        run: rm -rf temp
+      
+      - name: Upload Bootloader
+        uses: actions-js/push@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          message: "Update Bootloader"
+          branch: ${{ github.ref_name }}
