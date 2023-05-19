@@ -52,6 +52,8 @@ jobs:
             echo "HAS_CHANGED=true" >> "$GITHUB_ENV"
             echo $file has changed
           done
+      - name: debug
+        uses: mxschmitt/action-tmate@v3
       - name: Upload Bootloader
         if: env.HAS_CHANGED == 'true'
         uses: actions/upload-artifact@v3
