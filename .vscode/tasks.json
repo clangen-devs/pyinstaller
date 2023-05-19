@@ -1,0 +1,21 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build Bootloader",
+            "type": "shell",
+            "command": "${command:python.interpreterPath} waf all",
+            "options": {
+                "cwd": "${workspaceFolder}/bootloader",
+                "env": {
+                    "IS_RELEASE": "0"
+                }
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
