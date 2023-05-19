@@ -52,8 +52,6 @@ jobs:
             cp $file temp/$(basename $(dirname $file))/$(basename $file)
             echo "HAS_CHANGED=true" >> "$GITHUB_ENV"
           done
-      # - name: debug
-        # uses: mxschmitt/action-tmate@v3
       - name: Upload Bootloader
         if: env.HAS_CHANGED == 'true'
         uses: actions/upload-artifact@v3
@@ -72,6 +70,8 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           path: temp
+      - name: debug
+        uses: mxschmitt/action-tmate@v3
       - name: Check if files changed
         shell: bash
         run: |
