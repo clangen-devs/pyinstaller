@@ -66,4 +66,6 @@ jobs:
       - name: debug
         run: |
           ls -la temp
-          ls -la
+          find temp
+      - name: Move files
+        run: mv -f temp/*/* Pyinstaller
