@@ -25,9 +25,9 @@ jobs:
       # max-parallel: 1
     
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: 3.11
       - name: Install Gcc
@@ -45,11 +45,12 @@ jobs:
         shell: bash
         run: |
           mkdir temp
-          for file in $(git diff --name-only); do
-            cp $file temp/
+          for file in $(git ls-files --other --exclude-standard); do
+            mkdir -p $(dirname $file)
+            cp $file temp/$(dirname $file)
           done
       - name: Upload Bootloader
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.os }}-${{ matrix.bits }}bit
           path: temp/
@@ -58,7 +59,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Download Bootloader
         uses: actions/download-artifact@v3
         with:
