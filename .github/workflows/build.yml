@@ -86,4 +86,4 @@ jobs:
           find temp
       - name: Move files
         if: env.HAS_CHANGED == 'true'
-        run: mv -f temp/*/* PyInstaller
+        run: mv -f temp/* PyInstaller
