@@ -50,6 +50,7 @@ jobs:
             mkdir -p $(dirname $file)
             cp $file temp/$(dirname $file)
             echo "HAS_CHANGED=true" >> "$GITHUB_ENV"
+            echo $file has changed
           done
       - name: Upload Bootloader
         if: env.HAS_CHANGED == 'true'
